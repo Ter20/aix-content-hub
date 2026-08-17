@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "check": "node scripts/audit-content.mjs",
     "build": "node scripts/build.mjs",
     "preview": "npx serve dist"
   }

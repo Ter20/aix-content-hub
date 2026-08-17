@@ -5,6 +5,8 @@ date: "2026-08-15"
 updated: "2026-08-15"
 author: "Terrence Applewhite"
 slug: "missed-calls-cost-small-business-money"
+primaryKeyword: "cost of missed calls for small business"
+searchIntent: "Explain how unanswered calls cause small businesses to lose leads and revenue"
 tags: ["AI Receptionist", "Lead Generation", "Small Business", "VIRA"]
 featuredText: "YOUR MISSED CALL JUST CALLED YOUR COMPETITOR"
 draft: false

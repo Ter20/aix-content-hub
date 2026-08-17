@@ -7,8 +7,9 @@ This is the permanent source for the EDUCE/AIX blog. Netlify builds the public s
 1. Copy `content/post-template.md` into `content/posts`.
 2. Rename it using the article slug, such as `missed-calls-cost-small-business-money.md`.
 3. Complete the frontmatter and article body.
-4. Commit the file to the publishing branch.
-5. Netlify runs `npm run build` and publishes the updated blog, sitemap, RSS feed, and SEO metadata.
+4. Run `npm run check` to catch duplicate topics, slugs, titles, and invalid metadata.
+5. Commit the file to the publishing branch.
+6. Netlify runs `npm run build` and publishes the updated blog, sitemap, RSS feed, SEO metadata, and `deploy-manifest.json`.
 
 ## Local check
 

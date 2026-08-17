@@ -5,6 +5,8 @@ date: "YYYY-MM-DD"
 updated: "YYYY-MM-DD"
 author: "Terrence Applewhite"
 slug: "article-slug"
+primaryKeyword: "one unique keyword phrase this page owns"
+searchIntent: "the specific question or outcome this page alone answers"
 tags: ["AI", "Small Business"]
 featuredText: "SHORT FEATURED IMAGE PHRASE"
 draft: true
