@@ -10,7 +10,9 @@ const site = {
   name: "EDUCE by AIX",
   url: "https://blog.aix-io.com",
   description: "Plain-English AI education for small-business owners. Learn what works, what does not, and how to use AI responsibly.",
-  author: "Terrence Applewhite"
+  author: "Terrence Applewhite",
+  phoneDisplay: "972-972-9375",
+  phoneHref: "+19729729375"
 };
 
 function escapeHtml(value = "") {
@@ -20,7 +22,7 @@ function escapeHtml(value = "") {
 function inline(value) {
   return escapeHtml(value)
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\[(.+?)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2">$1</a>')
+    .replace(/\[(.+?)\]\(((?:https?:\/\/|tel:)[^)]+)\)/g, '<a href="$2">$1</a>')
     .replace(/`(.+?)`/g, "<code>$1</code>");
 }
 
@@ -47,7 +49,7 @@ function markdown(value) {
 }
 
 function layout({ title, description, canonical, body, type = "website", schema = null }) {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(title)}</title><meta name="description" content="${escapeHtml(description)}"><meta name="author" content="${site.author}"><link rel="canonical" href="${canonical}"><meta property="og:type" content="${type}"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="${site.name}"><meta name="twitter:card" content="summary_large_image"><link rel="stylesheet" href="/styles.css">${schema ? `<script type="application/ld+json">${JSON.stringify(schema).replaceAll("<", "\\u003c")}</script>` : ""}</head><body><header class="site-header"><nav class="nav" aria-label="Primary"><a class="brand" href="/"><span>EDUCE</span> by AIX</a><div class="nav-links"><a href="/blog/">Articles</a><a href="https://aix-io.com">AIX Services</a><a href="https://aix-io.com/book-demo">Book a Demo</a></div></nav></header>${body}<footer class="footer"><p>© 2026 AIX Artificial Intelligence Xtreme · Founded by Terrence Applewhite · Dallas, Texas</p><p>Learn clearly. Automate responsibly. Leave no lead behind.</p></footer></body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(title)}</title><meta name="description" content="${escapeHtml(description)}"><meta name="author" content="${site.author}"><link rel="canonical" href="${canonical}"><meta property="og:type" content="${type}"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="${site.name}"><meta name="twitter:card" content="summary_large_image"><link rel="stylesheet" href="/styles.css">${schema ? `<script type="application/ld+json">${JSON.stringify(schema).replaceAll("<", "\\u003c")}</script>` : ""}</head><body><header class="site-header"><nav class="nav" aria-label="Primary"><a class="brand" href="/"><span>EDUCE</span> by AIX</a><div class="nav-links"><a href="/blog/">Articles</a><a href="https://aix-io.com">AIX Services</a><a href="https://aix-io.com/book-demo">Book a Demo</a><a href="tel:${site.phoneHref}">Call VIRA: ${site.phoneDisplay}</a></div></nav></header>${body}<footer class="footer"><p>© 2026 AIX Artificial Intelligence Xtreme · Founded by Terrence Applewhite · Dallas, Texas</p><p>Call VIRA: <a href="tel:${site.phoneHref}">${site.phoneDisplay}</a></p><p>Learn clearly. Automate responsibly. Leave no lead behind.</p></footer></body></html>`;
 }
 
 fs.rmSync(outDir, { recursive: true, force: true });
@@ -61,7 +63,7 @@ const posts = audit.posts.filter(post => !post.draft).sort((a, b) => b.date.loca
 const cards = posts.map(post => `<article class="post-card"><span class="tag">${escapeHtml(post.tags?.[0] || "AI Education")}</span><h3><a href="/blog/${post.slug}/">${escapeHtml(post.title)}</a></h3><p>${escapeHtml(post.description)}</p><p class="meta">${new Date(`${post.date}T12:00:00`).toLocaleDateString("en-US", { year:"numeric", month:"long", day:"numeric" })} · ${escapeHtml(post.author)}</p></article>`).join("");
 
 const homeBody = `<section class="hero"><div class="hero-inner"><p class="eyebrow">Plain-English AI for business owners</p><h1>Learn the technology. Keep the human judgment.</h1><p>EDUCE breaks down AI, automation, lead capture, reviews, and growth without the jargon. Clear lessons you can use in a real business.</p><a class="button" href="/blog/">Start learning</a></div></section><section class="section"><div class="section-head"><div><p class="eyebrow">Latest lessons</p><h2>Build smarter. Miss less.</h2></div><a href="/blog/">View all articles →</a></div><div class="post-grid">${cards || '<div class="empty">The first article is being prepared.</div>'}</div></section>`;
-fs.writeFileSync(path.join(outDir, "index.html"), layout({ title:`${site.name} — Learn AI for Your Business`, description:site.description, canonical:`${site.url}/`, body:homeBody, schema:{"@context":"https://schema.org","@type":"EducationalOrganization","name":site.name,"url":site.url,"founder":{"@type":"Person","name":site.author}} }));
+fs.writeFileSync(path.join(outDir, "index.html"), layout({ title:`${site.name} — Learn AI for Your Business`, description:site.description, canonical:`${site.url}/`, body:homeBody, schema:{"@context":"https://schema.org","@type":"EducationalOrganization","name":site.name,"url":site.url,"telephone":site.phoneHref,"founder":{"@type":"Person","name":site.author}} }));
 
 fs.mkdirSync(path.join(outDir, "blog"), { recursive: true });
 const blogBody = `<section class="article-hero"><div><p class="eyebrow">EDUCE AI Education Blog</p><h1>Practical AI, explained like a human.</h1><p>Guides for business owners who want useful answers—not a dictionary full of robot soup.</p></div></section><section class="section"><div class="post-grid">${cards}</div></section>`;
