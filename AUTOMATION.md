@@ -7,6 +7,7 @@ Future publishing automations should follow these rules.
 - Create one new Markdown file inside `content/posts`.
 - Start from `content/post-template.md`.
 - Use a unique search-focused slug.
+- Set one unique `primaryKeyword` and one narrowly defined `searchIntent` that no existing post owns.
 - Set `draft: true` while the article awaits review.
 - Use Terrence Applewhite as author.
 - Use one primary CTA throughout the article.
@@ -16,11 +17,16 @@ Future publishing automations should follow these rules.
 ## Approval workflow
 
 1. Generate the article and run `npm run build`.
-2. Check that the build succeeds.
+2. Check that the content audit and build succeed. A duplicate title, slug, primary keyword, or search intent blocks deployment.
 3. Open a draft pull request containing the article.
 4. Review the headline, factual claims, links, CTA, canonical URL, and preview.
 5. Change `draft` to `false` and merge after approval.
 6. Netlify publishes the new version automatically.
+7. Verify `/deploy-manifest.json` on the live domain contains the new slug and URL.
+
+## Avoiding competing articles
+
+Before generating a post, read the existing frontmatter in `content/posts`. If the proposed topic has the same search intent as an existing article, update and expand that article instead of creating another one. Related posts are allowed only when each has a distinct reader question, primary keyword, and internal link to the topic owner.
 
 ## Channel roles
 

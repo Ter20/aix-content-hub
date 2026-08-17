@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { loadAndAuditPosts } from "./content-audit.mjs";
 
 const root = process.cwd();
 const contentDir = path.join(root, "content", "posts");
@@ -45,22 +46,6 @@ function markdown(value) {
   return html;
 }
 
-function parseFrontmatter(source) {
-  const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
-  if (!match) throw new Error("Post is missing frontmatter");
-  const data = {};
-  for (const line of match[1].split(/\r?\n/)) {
-    const pair = line.match(/^([A-Za-z]+):\s*(.*)$/);
-    if (!pair) continue;
-    let value = pair[2].trim();
-    if (value.startsWith("[") && value.endsWith("]")) value = value.slice(1, -1).split(",").map(x => x.trim().replace(/^['"]|['"]$/g, ""));
-    else if (value === "true" || value === "false") value = value === "true";
-    else value = value.replace(/^['"]|['"]$/g, "");
-    data[pair[1]] = value;
-  }
-  return { data, body: match[2] };
-}
-
 function layout({ title, description, canonical, body, type = "website", schema = null }) {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(title)}</title><meta name="description" content="${escapeHtml(description)}"><meta name="author" content="${site.author}"><link rel="canonical" href="${canonical}"><meta property="og:type" content="${type}"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="${site.name}"><meta name="twitter:card" content="summary_large_image"><link rel="stylesheet" href="/styles.css">${schema ? `<script type="application/ld+json">${JSON.stringify(schema).replaceAll("<", "\\u003c")}</script>` : ""}</head><body><header class="site-header"><nav class="nav" aria-label="Primary"><a class="brand" href="/"><span>EDUCE</span> by AIX</a><div class="nav-links"><a href="/blog/">Articles</a><a href="https://aix-io.com">AIX Services</a><a href="https://aix-io.com/book-demo">Book a Demo</a></div></nav></header>${body}<footer class="footer"><p>© 2026 AIX Artificial Intelligence Xtreme · Founded by Terrence Applewhite · Dallas, Texas</p><p>Learn clearly. Automate responsibly. Leave no lead behind.</p></footer></body></html>`;
 }
@@ -69,12 +54,9 @@ fs.rmSync(outDir, { recursive: true, force: true });
 fs.mkdirSync(outDir, { recursive: true });
 fs.cpSync(publicDir, outDir, { recursive: true });
 
-const posts = fs.readdirSync(contentDir).filter(file => file.endsWith(".md")).map(file => {
-  const source = fs.readFileSync(path.join(contentDir, file), "utf8");
-  const post = parseFrontmatter(source);
-  if (!post.data.title || !post.data.description || !post.data.date || !post.data.slug) throw new Error(`${file} is missing required frontmatter`);
-  return { ...post.data, body: post.body, file };
-}).filter(post => !post.draft).sort((a, b) => b.date.localeCompare(a.date));
+const audit = loadAndAuditPosts(contentDir);
+for (const warning of audit.warnings) console.warn(`WARNING: ${warning}`);
+const posts = audit.posts.filter(post => !post.draft).sort((a, b) => b.date.localeCompare(a.date));
 
 const cards = posts.map(post => `<article class="post-card"><span class="tag">${escapeHtml(post.tags?.[0] || "AI Education")}</span><h3><a href="/blog/${post.slug}/">${escapeHtml(post.title)}</a></h3><p>${escapeHtml(post.description)}</p><p class="meta">${new Date(`${post.date}T12:00:00`).toLocaleDateString("en-US", { year:"numeric", month:"long", day:"numeric" })} · ${escapeHtml(post.author)}</p></article>`).join("");
 
@@ -97,5 +79,11 @@ for (const post of posts) {
 const urls = [`${site.url}/`, `${site.url}/blog/`, ...posts.map(post => `${site.url}/blog/${post.slug}/`)];
 fs.writeFileSync(path.join(outDir, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((url, i) => `  <url><loc>${url}</loc><changefreq>${i < 2 ? "weekly" : "monthly"}</changefreq><priority>${i === 0 ? "1.0" : i === 1 ? "0.9" : "0.8"}</priority></url>`).join("\n")}\n</urlset>\n`);
 fs.writeFileSync(path.join(outDir, "feed.xml"), `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>${site.name}</title><link>${site.url}</link><description>${site.description}</description>${posts.map(post => `<item><title>${escapeHtml(post.title)}</title><link>${site.url}/blog/${post.slug}/</link><guid>${site.url}/blog/${post.slug}/</guid><pubDate>${new Date(`${post.date}T12:00:00Z`).toUTCString()}</pubDate><description>${escapeHtml(post.description)}</description></item>`).join("")}</channel></rss>`);
+
+fs.writeFileSync(path.join(outDir, "deploy-manifest.json"), JSON.stringify({
+  generatedAt: new Date().toISOString(),
+  publishedPostCount: posts.length,
+  posts: posts.map(({ slug, title, primaryKeyword, searchIntent, date }) => ({ slug, title, primaryKeyword, searchIntent, date, url: `${site.url}/blog/${slug}/` }))
+}, null, 2));
 
 console.log(`Built ${posts.length} published post(s) into dist/`);
