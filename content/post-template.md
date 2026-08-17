@@ -20,7 +20,7 @@ Open with the business problem in direct, plain English.
 
 Explain one idea at a time.
 
-> **Want to see this in action?** [Book a 15-minute VIRA demo](https://aix-io.com/book-demo).
+> **Want to see this in action?** Call VIRA at [972-972-9375](tel:+19729729375) or [book a 15-minute demo](https://aix-io.com/book-demo).
 
 ## Frequently Asked Questions
 
@@ -30,4 +30,4 @@ Answer it clearly and briefly.
 
 ## Take the Next Step
 
-[Book a 15-minute VIRA demo](https://aix-io.com/book-demo).
+Call VIRA at [972-972-9375](tel:+19729729375) or [book a 15-minute demo](https://aix-io.com/book-demo).

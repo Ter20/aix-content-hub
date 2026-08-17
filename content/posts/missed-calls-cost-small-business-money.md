@@ -22,7 +22,7 @@ But the caller may not wait. They may call the next business on Google.
 
 That is the real cost of a missed call. You did not simply miss a conversation. You may have lost a customer who was ready to buy.
 
-> **See the solution in action.** [Book a 15-minute VIRA demo](https://aix-io.com/book-demo).
+> **See the solution in action.** Call VIRA at [972-972-9375](tel:+19729729375) or [book a 15-minute demo](https://aix-io.com/book-demo).
 
 ## Customers Want an Answer Now
 
@@ -73,7 +73,7 @@ Depending on how it is configured, it can:
 
 It does not replace the expertise or personal relationships that make your business valuable. It protects the opportunity until you or your team can take over.
 
-> **No lead left behind.** [Hear how VIRA could answer your next missed call](https://aix-io.com/book-demo).
+> **No lead left behind.** Call VIRA at [972-972-9375](tel:+19729729375) or [hear how VIRA could answer your next missed call](https://aix-io.com/book-demo).
 
 ## What This Looks Like in Real Life
 
@@ -117,4 +117,4 @@ You do not need more leads leaking through the cracks. You need a reliable first
 
 AIX created VIRA—Virtual Intelligence for Revenue Acceleration—to help small businesses capture more opportunities, follow up faster, and leave fewer leads behind.
 
-**[Book a 15-minute VIRA demo](https://aix-io.com/book-demo) and hear how your business could answer the next call—even when you cannot.**
+**Call VIRA at [972-972-9375](tel:+19729729375) or [book a 15-minute demo](https://aix-io.com/book-demo) and hear how your business could answer the next call—even when you cannot.**
